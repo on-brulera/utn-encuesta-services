@@ -1,7 +1,9 @@
 postgres = {
-    "host": "localhost",
-    "db": "estilosdb",
+    "host": "autorack.proxy.rlwy.net",
+    "db": "railway",
     "user": "postgres",
-    "pw": "postgres123",
-    "port": "5432",
+    "pw": "OYyoiHvvmBElxuaWTRBfKESvvkHGhcLm",
+    "port": "12338",
 }
+
+
