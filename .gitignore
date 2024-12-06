@@ -1,0 +1,8 @@
+.venv/
+migrations
+__pycache__/
+.vscode
+.env
+cmd
+application/config/credential.py
+./config/credential.py
