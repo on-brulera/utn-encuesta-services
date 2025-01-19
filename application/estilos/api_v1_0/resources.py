@@ -24,6 +24,7 @@ from application.estilos.controladores.notaController import NotaController
 from application.estilos.controladores.notaController import NotaWithIdController
 from application.estilos.controladores.promptController import PromptController ,PromptWithIdController
 from application.constant.constants import Constants
+from application.estilos.controladores.estrategiaController import EstrategiaController, EstrategiaWithIdController, EstrategiaWithAllFieldsController
 
 
 routes_estilos_v1 = Blueprint('routes_estilos_v1', __name__)
@@ -134,3 +135,8 @@ api.add_resource(MensajeController, f'{Constants.API}/mensaje', endpoint='mensaj
 api.add_resource(LimpiarSesionesController, f'{Constants.API}/sesiones/limpiar', endpoint='limpiar_sesiones_resource')
 api.add_resource(HistorialWithCedulaAllComplete, f'{Constants.API}/estudiante/all/indo/<string:est_cedula>', endpoint='info_all_estudiante')
 api.add_resource(InterpretacionChatController, f'{Constants.API}/interpretacion/encuesta', endpoint='interpretacion_encuesta')
+
+#ESTRATEGIAS
+api.add_resource(EstrategiaController,  f'{Constants.API}/estrategia', endpoint='estrategia_resource')
+api.add_resource(EstrategiaWithIdController,  f'{Constants.API}/estrategia/<int:estr_id>', endpoint='estrategiatWithIdController_resource')
+api.add_resource(EstrategiaWithAllFieldsController,  f'{Constants.API}/estrategia/curso', endpoint='estrategiatWithAllController_resource')
