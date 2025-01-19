@@ -353,6 +353,35 @@ class InterpretacionChatController(Resource):
                 "error": str(e)
             }, 500
 
+
+class EstrategiaChatController(Resource):
+    def __init__(self):
+        super().__init__()
+
+    def post(self):        
+        try:
+            datos = request.get_json()
+            texto_datos = datos.get("silabo")  # Datos en formato string            
+
+            if not texto_datos:
+                return {"mensaje": "Faltan texto_datos en formato string para interpretar."}, 400
+            
+
+            # Enviar el contexto al modelo OpenAI
+            respuesta_ia = enviar_a_openai_estrategia(texto_datos)
+
+            # Respuesta final
+            return {
+                "respuesta": respuesta_ia
+            }, 200
+
+        except Exception as e:
+            return {
+                "mensaje": "Error al procesar la estrategia.",
+                "error": str(e)
+            }, 500
+
+
 def enviar_a_openai(mensaje):
     """
     Envía un mensaje al modelo GPT de OpenAI y devuelve solo el texto de la respuesta.
@@ -378,6 +407,60 @@ def enviar_a_openai(mensaje):
             "model": "gpt-3.5-turbo",
             "messages": [
                 {"role": "system", "content": "Eres un asistente experto en estilos de aprendizaje, das respuestas muy directas y respondes mensajes en un máximo de 40 palabras, guardas la información del estudiante, cédula y estilos, el historial que tienes y puedes compartir sus datos con el, el estudiante sabe que guardas su información asi que no hace falta que lo menciones, si te piden una interpretación de datos puedes enviar texto hasta de 125 palabras"},
+                {"role": "user", "content": mensaje}
+            ],
+            "temperature": 0.7
+        }
+
+        # Convertir el cuerpo de la solicitud a JSON
+        json_data = json.dumps(data).encode('utf-8')
+
+        # Crear la solicitud
+        req = urllib.request.Request(url, data=json_data, headers=headers, method="POST")
+
+        # Hacer la solicitud
+        with urllib.request.urlopen(req) as response:
+            if response.status == 200:
+                respuesta_json = json.loads(response.read().decode('utf-8'))
+                # Extraer el texto del contenido de la IA
+                contenido = respuesta_json.get("choices", [])[0].get("message", {}).get("content", "")                
+                return contenido.strip()  # Devuelve el texto como string
+            else:
+                # Manejar errores de la API de OpenAI
+                error_message = f"Error en la API de OpenAI: {response.status} - {response.reason}"
+                return error_message
+
+    except urllib.error.URLError as e:
+        # Manejar errores de conexión
+        return f"No se pudo conectar a la API de OpenAI. Detalles: {e.reason}"
+
+
+
+def enviar_a_openai_estrategia(mensaje):
+    """
+    Envía un mensaje al modelo GPT de OpenAI y devuelve solo el texto de la respuesta.
+    """
+
+    global apyKeyOpenAi 
+
+    try:        
+        if not apyKeyOpenAi:            
+            credencial = CredencialesAPI.query.filter_by(nombre_servicio="chat").first()
+            if credencial:
+                apyKeyOpenAi = credencial.api_key                
+            else:
+                raise ValueError("No se encontró una clave API válida para el servicio 'chat'.")
+        
+        url = "https://api.openai.com/v1/chat/completions"
+        api_key = apyKeyOpenAi        
+        headers = {
+            "Authorization": f"Bearer {api_key}",
+            "Content-Type": "application/json"
+        }
+        data = {
+            "model": "gpt-3.5-turbo",
+            "messages": [
+                {"role": "system", "content": "Eres un asistente experto en estilos de aprendizaje y estrategias pedagógicas, das respuestas directas pero sugiriendo temas detallados y respondes mensajes en un máximo de 700 palabras siempre que sea necesario, responde si es posible con la menor cantidad de palabras en un mínimo de 100 palabras. El formato de respuesta para las estrategias es: con un guión cada estrategia o metodología para cada tema"},
                 {"role": "user", "content": mensaje}
             ],
             "temperature": 0.7

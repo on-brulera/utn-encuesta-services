@@ -1,7 +1,7 @@
 from flask import Blueprint
 from flask_restful import Api
 
-from application.estilos.controladores.chatController import ChatController, HistorialWithCedulaAllComplete, InterpretacionChatController, LimpiarSesionesController, MensajeController
+from application.estilos.controladores.chatController import ChatController, HistorialWithCedulaAllComplete, InterpretacionChatController, LimpiarSesionesController, MensajeController, EstrategiaChatController
 from application.estilos.controladores.rolController import RolController, RolWithIdController
 from application.estilos.controladores.personaController import NotasPorCursoMateriaController, PersonaController, PersonaWithIdController
 from application.estilos.controladores.cursoController import CursoController, CursoWithIdController, CursoWithIdUsuario
@@ -135,6 +135,7 @@ api.add_resource(MensajeController, f'{Constants.API}/mensaje', endpoint='mensaj
 api.add_resource(LimpiarSesionesController, f'{Constants.API}/sesiones/limpiar', endpoint='limpiar_sesiones_resource')
 api.add_resource(HistorialWithCedulaAllComplete, f'{Constants.API}/estudiante/all/indo/<string:est_cedula>', endpoint='info_all_estudiante')
 api.add_resource(InterpretacionChatController, f'{Constants.API}/interpretacion/encuesta', endpoint='interpretacion_encuesta')
+api.add_resource(EstrategiaChatController, f'{Constants.API}/chat/estrategia', endpoint='estrategia_silabo')
 
 #ESTRATEGIAS
 api.add_resource(EstrategiaController,  f'{Constants.API}/estrategia', endpoint='estrategia_resource')

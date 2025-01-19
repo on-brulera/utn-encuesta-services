@@ -11,7 +11,7 @@ class Estrategia(db.Model, BaseModelMixin):
     prom_notas = db.Column(db.String(),  nullable=True)
     enc_id = db.Column(db.Integer(),  nullable=True)
     mat_id = db.Column(db.Integer(),  nullable=True)
-    estr_estrategia = db.Column(db.String(900), nullable=True)
+    estr_estrategia = db.Column(db.String(), nullable=True)
 
     @classmethod
     def get_by_id(cls, estr_id):
